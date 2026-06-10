@@ -1,87 +1,104 @@
-from models.student import Student
+# main.py
 from services.system_manager import SystemManager
-from services.score_manager import ScoreManager
-from ui.menu import display_menu
+from ui.menu import *
+import sys
 
+def handle_student_menu(manager):
+    while True:
+        show_student_menu()
+        choice = input("Chọn: ").strip()
+        if choice == "1":
+            manager.add_student()
+        elif choice == "2":
+            manager.show_all_students()
+        elif choice == "3":
+            manager.edit_student()
+        elif choice == "4":
+            manager.delete_student()
+        elif choice == "0":
+            break
+        else:
+            print("Lựa chọn không hợp lệ!")
 
-manager = SystemManager()
+def handle_score_menu(manager):
+    while True:
+        show_score_menu()
+        choice = input("Chọn: ").strip()
+        if choice == "1":
+            manager.add_scores_for_student()
+        elif choice == "2":
+            manager.update_score_for_student()
+        elif choice == "3":
+            manager.view_scores_of_student()
+        elif choice == "0":
+            break
+        else:
+            print("Lựa chọn không hợp lệ!")
 
-while True:
+def handle_search_sort_menu(manager):
+    while True:
+        show_search_sort_menu()
+        choice = input("Chọn: ").strip()
+        if choice == "1":
+            keyword = input("Nhập tên cần tìm: ")
+            results = manager.search_by_name(keyword)
+            if results:
+                for s in results:
+                    print(s)
+            else:
+                print("Không tìm thấy.")
+        elif choice == "2":
+            sid = input("Nhập MSSV: ")
+            results = manager.search_by_id(sid)
+            if results:
+                print(results[0])
+            else:
+                print("Không tìm thấy.")
+        elif choice == "3":
+            manager.sort_by_gpa(reverse=True)
+            print("Đã sắp xếp theo GPA.")
+            manager.show_all_students()
+        elif choice == "4":
+            manager.sort_by_name()
+            print("Đã sắp xếp theo tên.")
+            manager.show_all_students()
+        elif choice == "5":
+            manager.sort_by_birth_year()
+            print("Đã sắp xếp theo năm sinh.")
+            manager.show_all_students()
+        elif choice == "0":
+            break
+        else:
+            print("Lựa chọn không hợp lệ!")
 
-    display_menu()
+def main():
+    manager = SystemManager()
+    while True:
+        try:
+            show_main_menu()
+            choice = input("Nhập lựa chọn: ").strip()
+            if choice == "1":
+                handle_student_menu(manager)
+            elif choice == "2":
+                handle_score_menu(manager)
+            elif choice == "3":
+                handle_search_sort_menu(manager)
+            elif choice == "4":
+                manager.get_overall_gpa()
+            elif choice == "5":
+                manager.save_to_file()
+            elif choice == "6":
+                manager.load_from_file()
+            elif choice == "0":
+                print("Cảm ơn đã sử dụng chương trình. Tạm biệt!")
+                sys.exit(0)
+            else:
+                print("Lựa chọn không hợp lệ! Vui lòng nhập số từ 0 đến 6.")
+        except KeyboardInterrupt:
+            print("\nThoát chương trình.")
+            sys.exit(0)
+        except Exception as e:
+            print(f"Đã xảy ra lỗi: {e}. Vui lòng thử lại.")
 
-    choice = input("Choose: ")
-
-    if choice == "1":
-
-        student = Student(
-            input("ID: "),
-            input("Name: "),
-            int(input("Day: ")),
-            int(input("Month: ")),
-            int(input("Year: ")),
-            input("Major: ")
-        )
-
-        manager.add_student(student)
-
-    elif choice == "2":
-
-        manager.show_students()
-
-    elif choice == "3":
-
-        sid = input("Student ID: ")
-
-        result = manager.search_by_id(sid)
-
-        if result:
-            ScoreManager.enter_scores(result[0])
-
-    elif choice == "4":
-
-        name = input("Name: ")
-
-        for s in manager.search_by_name(name):
-            print(s)
-
-    elif choice == "5":
-
-        sid = input("ID: ")
-
-        print(manager.search_by_id(sid))
-
-    elif choice == "6":
-
-        sid = input("Delete ID: ")
-
-        manager.delete_student(sid)
-
-    elif choice == "7":
-
-        manager.sort_by_gpa()
-
-    elif choice == "8":
-
-        manager.sort_by_name()
-
-    elif choice == "9":
-
-        print(
-            "Class GPA:",
-            manager.get_overall_gpa()
-        )
-
-    elif choice == "10":
-
-        manager.save_to_file()
-
-    elif choice == "11":
-
-        manager.load_from_file()
-
-    elif choice == "0":
-
-        manager.save_to_file()
-
-        break
+if __name__ == "__main__":
+    main()
