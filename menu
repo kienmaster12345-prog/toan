@@ -1,37 +1,81 @@
-# ui/menu.py
-def show_main_menu():
-    print("\n" + "=" * 40)
-    print("       STUDENT MANAGEMENT SYSTEM")
-    print("=" * 40)
-    print("1. Quản lý sinh viên (CRUD)")
-    print("2. Quản lý điểm số")
-    print("3. Tìm kiếm & Sắp xếp")
-    print("4. Xem GPA toàn lớp")
-    print("5. Lưu dữ liệu")
-    print("6. Tải dữ liệu từ file")
-    print("0. Thoát")
-    print("=" * 40)
+from system_manager import SystemManager
 
-def show_student_menu():
-    print("\n--- QUẢN LÝ SINH VIÊN ---")
-    print("1. Thêm sinh viên mới")
-    print("2. Hiển thị tất cả")
-    print("3. Sửa thông tin sinh viên")
-    print("4. Xóa sinh viên")
-    print("0. Quay lại")
+class Menu:
+    """Hiển thị menu và điều khiển luồng chương trình."""
 
-def show_score_menu():
-    print("\n--- QUẢN LÝ ĐIỂM ---")
-    print("1. Nhập điểm cho sinh viên")
-    print("2. Sửa điểm")
-    print("3. Xem điểm một sinh viên")
-    print("0. Quay lại")
+    def __init__(self):
+        self.sm = SystemManager()
 
-def show_search_sort_menu():
-    print("\n--- TÌM KIẾM & SẮP XẾP ---")
-    print("1. Tìm theo tên")
-    print("2. Tìm theo MSSV")
-    print("3. Sắp xếp theo GPA (cao xuống thấp)")
-    print("4. Sắp xếp theo tên (A-Z)")
-    print("5. Sắp xếp theo năm sinh")
-    print("0. Quay lại")
+    def display(self):
+        while True:
+            print("\n" + "=" * 40)
+            print("      CHƯƠNG TRÌNH QUẢN LÝ SINH VIÊN")
+            print("=" * 40)
+            print("1. Thêm sinh viên mới")
+            print("2. Hiển thị danh sách sinh viên")
+            print("3. Sửa thông tin sinh viên (theo MSSV)")
+            print("4. Xóa sinh viên (theo MSSV hoặc tên)")
+            print("5. Nhập điểm cho sinh viên")
+            print("6. Tìm kiếm sinh viên theo tên")
+            print("7. Tìm kiếm sinh viên theo MSSV")
+            print("8. Sắp xếp sinh viên")
+            print("9. Tính GPA trung bình toàn khóa")
+            print("10. Lưu danh sách ra file")
+            print("0. Thoát")
+            print("-" * 40)
+            choice = input("Chọn chức năng: ").strip()
+
+            if choice == "1":
+                self.sm.add_student()
+            elif choice == "2":
+                self.sm.show_students()
+            elif choice == "3":
+                sid = input("Nhập MSSV cần sửa: ").strip()
+                self.sm.edit_student(sid)
+            elif choice == "4":
+                keyword = input("Nhập MSSV hoặc tên cần xóa: ").strip()
+                self.sm.delete_student(keyword)
+            elif choice == "5":
+                sid = input("Nhập MSSV để nhập điểm: ").strip()
+                self.sm.add_scores_for_student(sid)
+            elif choice == "6":
+                name = input("Nhập tên cần tìm: ").strip()
+                results = self.sm.search_by_name(name)
+                if results:
+                    print(f"\nTìm thấy {len(results)} sinh viên:")
+                    for s in results:
+                        print(s)
+                else:
+                    print("Không tìm thấy.")
+            elif choice == "7":
+                sid = input("Nhập MSSV cần tìm: ").strip()
+                results = self.sm.search_by_id(sid)
+                if results:
+                    print(results[0])
+                else:
+                    print("Không tìm thấy.")
+            elif choice == "8":
+                print("\n--- Sắp xếp theo ---")
+                print("a. Tên (A-Z)")
+                print("b. GPA (cao xuống thấp)")
+                print("c. MSSV (tăng dần)")
+                sub = input("Chọn (a/b/c): ").lower()
+                if sub == 'a':
+                    self.sm.sort_students_by_name()
+                elif sub == 'b':
+                    self.sm.sort_students_by_gpa()
+                elif sub == 'c':
+                    self.sm.sort_students_by_id()
+                else:
+                    print("Lựa chọn không hợp lệ.")
+            elif choice == "9":
+                self.sm.overall_gpa()
+            elif choice == "10":
+                self.sm.save_to_file()
+            elif choice == "0":
+                print("Lưu dữ liệu trước khi thoát...")
+                self.sm.save_to_file()
+                print("Thoát chương trình. Tạm biệt!")
+                break
+            else:
+                print("Chức năng không hợp lệ, vui lòng chọn lại!")
