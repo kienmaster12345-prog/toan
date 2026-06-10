@@ -1,20 +1,27 @@
+# utils/validator.py
 import re
 
+def is_valid_score(score) -> bool:
+    try:
+        return 0 <= float(score) <= 10
+    except (ValueError, TypeError):
+        return False
 
-class Validator:
+def is_valid_name(name: str) -> bool:
+    return bool(re.match(r"^[A-Za-zÀ-ỹ\s]+$", name.strip()))
 
-    @staticmethod
-    def validate_name(name):
-        return bool(re.match(r"^[A-Za-zÀ-ỹ\s]+$", name))
+def is_valid_student_id(student_id: str) -> bool:
+    return bool(re.match(r"^[A-Za-z]{2}\d+$", student_id.strip()))
 
-    @staticmethod
-    def validate_student_id(student_id):
-        return bool(re.match(r"^[A-Za-z]{2}\d+$", student_id))
+def is_valid_day(day: int) -> bool:
+    return 1 <= day <= 31
 
-    @staticmethod
-    def validate_score(score):
-        return 0 <= score <= 10
+def is_valid_month(month: int) -> bool:
+    return 1 <= month <= 12
 
-    @staticmethod
-    def validate_year(year):
-        return 1990 <= year <= 2010
+def is_valid_year(year: int) -> bool:
+    return 1900 <= year <= 2010
+
+def validate_date(day: int, month: int, year: int) -> bool:
+    """Kiểm tra ngày hợp lệ (sơ bộ)."""
+    return (is_valid_day(day) and is_valid_month(month) and is_valid_year(year))
