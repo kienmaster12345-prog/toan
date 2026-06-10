@@ -1,0 +1,87 @@
+from models.student import Student
+from services.system_manager import SystemManager
+from services.score_manager import ScoreManager
+from ui.menu import display_menu
+
+
+manager = SystemManager()
+
+while True:
+
+    display_menu()
+
+    choice = input("Choose: ")
+
+    if choice == "1":
+
+        student = Student(
+            input("ID: "),
+            input("Name: "),
+            int(input("Day: ")),
+            int(input("Month: ")),
+            int(input("Year: ")),
+            input("Major: ")
+        )
+
+        manager.add_student(student)
+
+    elif choice == "2":
+
+        manager.show_students()
+
+    elif choice == "3":
+
+        sid = input("Student ID: ")
+
+        result = manager.search_by_id(sid)
+
+        if result:
+            ScoreManager.enter_scores(result[0])
+
+    elif choice == "4":
+
+        name = input("Name: ")
+
+        for s in manager.search_by_name(name):
+            print(s)
+
+    elif choice == "5":
+
+        sid = input("ID: ")
+
+        print(manager.search_by_id(sid))
+
+    elif choice == "6":
+
+        sid = input("Delete ID: ")
+
+        manager.delete_student(sid)
+
+    elif choice == "7":
+
+        manager.sort_by_gpa()
+
+    elif choice == "8":
+
+        manager.sort_by_name()
+
+    elif choice == "9":
+
+        print(
+            "Class GPA:",
+            manager.get_overall_gpa()
+        )
+
+    elif choice == "10":
+
+        manager.save_to_file()
+
+    elif choice == "11":
+
+        manager.load_from_file()
+
+    elif choice == "0":
+
+        manager.save_to_file()
+
+        break
