@@ -1,40 +1,73 @@
-class ScoreManager:
+# services/score_manager.py
+from utils.validator import is_valid_score
 
-    @staticmethod
-    def enter_scores(student):
+class ScoreManager:
+    """Quản lý các thao tác liên quan đến điểm số."""
+
+    def enter_scores(self, student):
+        """Nhập điểm cho sinh viên (có thể nhiều môn)."""
+        print(f"Nhập điểm cho sinh viên {student.name} (MSSV: {student.student_id})")
+        while True:
+            subject = input("Tên môn học (nhập 'done' để kết thúc): ").strip()
+            if subject.lower() == 'done':
+                break
+            if not subject:
+                print("Tên môn không được để trống!")
+                continue
+
+            while True:
+                try:
+                    score = float(input("Điểm (0-10): "))
+                    if is_valid_score(score):
+                        student.add_score(subject, score)
+                        print(f"Đã thêm môn {subject} điểm {score}")
+                        break
+                    else:
+                        print("Điểm phải từ 0 đến 10!")
+                except ValueError:
+                    print("Vui lòng nhập số!")
+        student.calculate_gpa()
+        print("Hoàn tất nhập điểm.")
+
+    def update_score(self, student):
+        """Cập nhật điểm một môn đã có."""
+        scores = student.get_scores()
+        if not scores:
+            print("Sinh viên chưa có môn nào để sửa.")
+            return
+
+        print("Các môn hiện tại:", list(scores.keys()))
+        subject = input("Nhập tên môn cần sửa: ").strip()
+        if subject not in scores:
+            print("Môn không tồn tại!")
+            return
 
         while True:
-
-            subject = input("Subject: ")
-
             try:
-                score = float(input("Score: "))
-
-                student.add_score(subject, score)
-
+                new_score = float(input("Điểm mới (0-10): "))
+                if is_valid_score(new_score):
+                    student.update_score(subject, new_score)
+                    print("Cập nhật thành công!")
+                    break
+                else:
+                    print("Điểm phải từ 0 đến 10!")
             except ValueError:
-                print("Invalid score")
+                print("Vui lòng nhập số!")
 
-            cont = input("Continue(y/n): ")
+    def view_scores(self, student):
+        """Hiển thị bảng điểm của sinh viên."""
+        scores = student.get_scores()
+        if not scores:
+            print("Chưa có điểm nào.")
+        else:
+            print(f"Bảng điểm của {student.name}:")
+            for sub, sc in scores.items():
+                print(f"  {sub}: {sc}")
+            print(f"GPA: {student.gpa:.2f}")
 
-            if cont.lower() == "n":
-                break
-
-    @staticmethod
-    def view_scores(student):
-
-        for subject, score in student.scores.items():
-            print(subject, score)
-
-    @staticmethod
-    def calculate_class_gpa(students):
-
+    def calculate_class_gpa(self, students):
+        """Tính GPA trung bình cả lớp (hàm tĩnh gọi từ SystemManager)."""
         if not students:
-            return 0
-
-        total = sum(
-            student.calculate_gpa()
-            for student in students
-        )
-
-        return round(total / len(students), 2)
+            return 0.0
+        total = sum(s.gpa for s in students)
+        return total / len(students)
