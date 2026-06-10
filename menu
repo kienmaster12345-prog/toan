@@ -1,0 +1,16 @@
+def display_menu():
+
+    print("\n===== MENU =====")
+
+    print("1. Add Student")
+    print("2. Show Students")
+    print("3. Add Score")
+    print("4. Search By Name")
+    print("5. Search By ID")
+    print("6. Delete Student")
+    print("7. Sort By GPA")
+    print("8. Sort By Name")
+    print("9. Overall GPA")
+    print("10. Save")
+    print("11. Load")
+    print("0. Exit")
