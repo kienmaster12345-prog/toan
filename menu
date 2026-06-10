@@ -1,16 +1,37 @@
-def display_menu():
+# ui/menu.py
+def show_main_menu():
+    print("\n" + "=" * 40)
+    print("       STUDENT MANAGEMENT SYSTEM")
+    print("=" * 40)
+    print("1. Quản lý sinh viên (CRUD)")
+    print("2. Quản lý điểm số")
+    print("3. Tìm kiếm & Sắp xếp")
+    print("4. Xem GPA toàn lớp")
+    print("5. Lưu dữ liệu")
+    print("6. Tải dữ liệu từ file")
+    print("0. Thoát")
+    print("=" * 40)
 
-    print("\n===== MENU =====")
+def show_student_menu():
+    print("\n--- QUẢN LÝ SINH VIÊN ---")
+    print("1. Thêm sinh viên mới")
+    print("2. Hiển thị tất cả")
+    print("3. Sửa thông tin sinh viên")
+    print("4. Xóa sinh viên")
+    print("0. Quay lại")
 
-    print("1. Add Student")
-    print("2. Show Students")
-    print("3. Add Score")
-    print("4. Search By Name")
-    print("5. Search By ID")
-    print("6. Delete Student")
-    print("7. Sort By GPA")
-    print("8. Sort By Name")
-    print("9. Overall GPA")
-    print("10. Save")
-    print("11. Load")
-    print("0. Exit")
+def show_score_menu():
+    print("\n--- QUẢN LÝ ĐIỂM ---")
+    print("1. Nhập điểm cho sinh viên")
+    print("2. Sửa điểm")
+    print("3. Xem điểm một sinh viên")
+    print("0. Quay lại")
+
+def show_search_sort_menu():
+    print("\n--- TÌM KIẾM & SẮP XẾP ---")
+    print("1. Tìm theo tên")
+    print("2. Tìm theo MSSV")
+    print("3. Sắp xếp theo GPA (cao xuống thấp)")
+    print("4. Sắp xếp theo tên (A-Z)")
+    print("5. Sắp xếp theo năm sinh")
+    print("0. Quay lại")
