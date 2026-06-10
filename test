@@ -1,0 +1,32 @@
+from system_manager import SystemManager
+from student import Student
+
+class Test:
+    """Lớp dùng để chạy thử các chức năng (không cần menu)."""
+
+    @staticmethod
+    def run():
+        sm = SystemManager()
+        print("=== TEST: Thêm sinh viên mẫu ===")
+        # Tạo sinh viên mẫu bằng code
+        s1 = Student("SE999999", "Nguyễn Văn A", 15, 5, 2000, "CNTT", {}, 0.0)
+        s2 = Student("SE888888", "Trần Thị B", 20, 10, 2001, "QTKD", {}, 0.0)
+        sm.add_student(s1)
+        sm.add_student(s2)
+        sm.show_students()
+
+        print("\n=== TEST: Thêm điểm cho sinh viên SE999999 ===")
+        # Giả lập thêm điểm (không cần nhập từ bàn phím)
+        s1._Student__scores = {"Toán": 8.5, "Lý": 7.0}
+        s1.calculate_gpa()
+        sm.save_to_file()
+
+        print("\n=== TEST: Tìm kiếm theo tên 'Nguyễn' ===")
+        for s in sm.search_by_name("Nguyễn"):
+            print(s)
+
+        print("\n=== TEST: GPA trung bình ===")
+        sm.overall_gpa()
+
+if __name__ == "__main__":
+    Test.run()
