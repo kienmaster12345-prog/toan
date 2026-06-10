@@ -1,0 +1,25 @@
+import os
+
+
+class FileHandler:
+
+    def __init__(self, file_path):
+        self.file_path = file_path
+
+    def read_lines(self):
+
+        if not os.path.exists(self.file_path):
+            return []
+
+        with open(self.file_path, "r", encoding="utf8") as f:
+            return f.readlines()
+
+    def write_lines(self, lines):
+
+        with open(self.file_path, "w", encoding="utf8") as f:
+            f.writelines(lines)
+
+    def append_line(self, line):
+
+        with open(self.file_path, "a", encoding="utf8") as f:
+            f.write(line)
