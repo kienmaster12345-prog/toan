@@ -1,0 +1,40 @@
+class ScoreManager:
+
+    @staticmethod
+    def enter_scores(student):
+
+        while True:
+
+            subject = input("Subject: ")
+
+            try:
+                score = float(input("Score: "))
+
+                student.add_score(subject, score)
+
+            except ValueError:
+                print("Invalid score")
+
+            cont = input("Continue(y/n): ")
+
+            if cont.lower() == "n":
+                break
+
+    @staticmethod
+    def view_scores(student):
+
+        for subject, score in student.scores.items():
+            print(subject, score)
+
+    @staticmethod
+    def calculate_class_gpa(students):
+
+        if not students:
+            return 0
+
+        total = sum(
+            student.calculate_gpa()
+            for student in students
+        )
+
+        return round(total / len(students), 2)
