@@ -1,25 +1,46 @@
+# utils/file_handler.py
 import os
 
-
 class FileHandler:
-
-    def __init__(self, file_path):
+    def __init__(self, file_path: str):
         self.file_path = file_path
 
-    def read_lines(self):
+    def file_exists(self) -> bool:
+        return os.path.exists(self.file_path)
 
-        if not os.path.exists(self.file_path):
+    def read_lines(self) -> list:
+        """Đọc tất cả dòng từ file, trả về list các dòng."""
+        if not self.file_exists():
             return []
-
-        with open(self.file_path, "r", encoding="utf8") as f:
+        with open(self.file_path, "r", encoding="utf-8") as f:
             return f.readlines()
 
-    def write_lines(self, lines):
+    def write_lines(self, lines: list, mode: str = "a"):
+        """Ghi thêm (append) các dòng vào file."""
+        with open(self.file_path, mode, encoding="utf-8") as f:
+            for line in lines:
+                f.write(line)
+                f.flush()
 
-        with open(self.file_path, "w", encoding="utf8") as f:
-            f.writelines(lines)
+    def rewrite_lines(self, lines: list):
+        """Ghi đè toàn bộ file."""
+        with open(self.file_path, "w", encoding="utf-8") as f:
+            for line in lines:
+                f.write(line)
 
-    def append_line(self, line):
+    def read_students(self):
+        """Đọc danh sách sinh viên từ file (dùng cho load)."""
+        from models.student import Student
+        lines = self.read_lines()
+        students = []
+        for line in lines:
+            if line.strip():
+                s = Student.from_file_string(line)
+                if s:
+                    students.append(s)
+        return students
 
-        with open(self.file_path, "a", encoding="utf8") as f:
-            f.write(line)
+    def save_students(self, students):
+        """Ghi toàn bộ danh sách sinh viên vào file."""
+        lines = [s.to_file_string() for s in students]
+        self.rewrite_lines(lines)
