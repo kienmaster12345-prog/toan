@@ -1,0 +1,20 @@
+import re
+
+
+class Validator:
+
+    @staticmethod
+    def validate_name(name):
+        return bool(re.match(r"^[A-Za-zÀ-ỹ\s]+$", name))
+
+    @staticmethod
+    def validate_student_id(student_id):
+        return bool(re.match(r"^[A-Za-z]{2}\d+$", student_id))
+
+    @staticmethod
+    def validate_score(score):
+        return 0 <= score <= 10
+
+    @staticmethod
+    def validate_year(year):
+        return 1990 <= year <= 2010
