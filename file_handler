@@ -1,46 +1,35 @@
-# utils/file_handler.py
 import os
 
 class FileHandler:
-    def __init__(self, file_path: str):
+    """Xử lý đọc/ghi file văn bản."""
+
+    def __init__(self, file_path):
         self.file_path = file_path
 
-    def file_exists(self) -> bool:
-        return os.path.exists(self.file_path)
-
-    def read_lines(self) -> list:
-        """Đọc tất cả dòng từ file, trả về list các dòng."""
+    def read_lines(self):
+        """Đọc tất cả các dòng trong file."""
         if not self.file_exists():
             return []
         with open(self.file_path, "r", encoding="utf-8") as f:
             return f.readlines()
 
-    def write_lines(self, lines: list, mode: str = "a"):
+    def write_lines(self, lines):
         """Ghi thêm (append) các dòng vào file."""
-        with open(self.file_path, mode, encoding="utf-8") as f:
+        with open(self.file_path, "a", encoding="utf-8") as f:
             for line in lines:
                 f.write(line)
-                f.flush()
+            f.flush()
 
-    def rewrite_lines(self, lines: list):
+    def rewrite_lines(self, lines):
         """Ghi đè toàn bộ file."""
         with open(self.file_path, "w", encoding="utf-8") as f:
             for line in lines:
                 f.write(line)
 
-    def read_students(self):
-        """Đọc danh sách sinh viên từ file (dùng cho load)."""
-        from models.student import Student
-        lines = self.read_lines()
-        students = []
-        for line in lines:
-            if line.strip():
-                s = Student.from_file_string(line)
-                if s:
-                    students.append(s)
-        return students
+    def file_exists(self):
+        return os.path.exists(self.file_path)
 
-    def save_students(self, students):
-        """Ghi toàn bộ danh sách sinh viên vào file."""
-        lines = [s.to_file_string() for s in students]
-        self.rewrite_lines(lines)
+    def clear_file(self):
+        """Xóa toàn bộ nội dung file."""
+        with open(self.file_path, "w", encoding="utf-8") as f:
+            pass
