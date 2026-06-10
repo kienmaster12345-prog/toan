@@ -1,0 +1,79 @@
+class Student:
+
+    def __init__(
+            self,
+            student_id,
+            name,
+            day,
+            month,
+            year,
+            major,
+            scores=None):
+
+        self.__student_id = student_id
+        self.__name = name
+        self.__day = day
+        self.__month = month
+        self.__year = year
+        self.__major = major
+        self.__scores = scores if scores else {}
+        self.__gpa = 0
+
+    @property
+    def student_id(self):
+        return self.__student_id
+
+    @property
+    def name(self):
+        return self.__name
+
+    @property
+    def birth_year(self):
+        return self.__year
+
+    @property
+    def scores(self):
+        return self.__scores
+
+    def add_score(self, subject, score):
+        self.__scores[subject] = score
+        self.calculate_gpa()
+
+    def update_score(self, subject, score):
+
+        if subject in self.__scores:
+            self.__scores[subject] = score
+            self.calculate_gpa()
+
+    def calculate_gpa(self):
+
+        if not self.__scores:
+            self.__gpa = 0
+        else:
+            self.__gpa = round(
+                sum(self.__scores.values()) /
+                len(self.__scores), 2
+            )
+
+        return self.__gpa
+
+    def to_file_string(self):
+
+        return (
+            f"{self.__student_id}|"
+            f"{self.__name}|"
+            f"{self.__day}|"
+            f"{self.__month}|"
+            f"{self.__year}|"
+            f"{self.__major}|"
+            f"{self.__scores}|"
+            f"{self.__gpa}\n"
+        )
+
+    def __str__(self):
+
+        return (
+            f"ID: {self.__student_id} | "
+            f"Name: {self.__name} | "
+            f"GPA: {self.__gpa}"
+        )
